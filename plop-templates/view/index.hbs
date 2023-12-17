@@ -1,0 +1,89 @@
+{{#if template}}
+<template>
+  <div class="app-container">
+    <Search :filters="conf.filters" :roles="$route.meta.roles" :actions="conf.actions" @change="Change($event)" @action="Action($event)" @enter="Enter($event)" />
+    <Report v-loading="loading" :list="list" width="100%" :summary-method="getSummaries(conf.report.items, total, 5)" :expand="conf.report.expand" :items="conf.report.items" :roles="$route.meta.roles" :actions="conf.report.actions" @row-action="RowAction($event)">
+      <template #demo="{ item }">
+        <div :class="{ 'color-error' : item.WithdrawalAmount != 0 }">{{ 'Slot Demo' }}</div>
+      </template>
+    </Report>
+    <el-pagination
+      background
+      layout="total, sizes, prev, pager, next, jumper"
+      :page-sizes="[10, 20, 50, 100, 200]"
+      :page-size="params.PageSize"
+      :current-page="params.PageNumber"
+      :total="total.totalCount"
+      @size-change="HandleSizeChange"
+      @current-change="ChangePage"
+    />
+  </div>
+</template>
+{{/if}}
+
+{{#if script}}
+<script>
+import { getList } from '@/03-api/{{ _module }}'
+import conf, { search } from '../config/{{ name }}'
+import Search from '@/01-components/Search'
+import Report from '@/01-components/Report'
+import mixinPage from '@/07-mixins/page'
+
+export default {
+  name: '{{ properCase name }}',
+  components: { Search, Report },
+  mixins: [mixinPage],
+  props: {},
+  data() {
+    return {
+      conf,
+      search,
+      params: { ...search },
+      loading: false,
+      list: [],
+      total: {
+        totalCount: 0,
+        withdrawalAmount: 0,
+        depositAmount: 0
+      },
+      model: { }
+    }
+  },
+  created() {
+    this.loadList()
+  },
+  mounted() {},
+  methods: {
+     async loadList() {
+      this.loading = true
+      try {
+        const [totalCount, withdrawalAmount, depositAmount, list] = await getList(this.params)
+        this.total = {
+          totalCount,
+          withdrawalAmount,
+          depositAmount
+        }
+        this.list = list
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+    },
+
+    onClosed() {
+      this.model = {}
+      this.loadList()
+    },
+    create() {
+      console.log('create')
+    }
+  }
+}
+</script>
+{{/if}}
+
+{{#if style}}
+<style lang="scss" scoped>
+
+</style>
+{{/if}}

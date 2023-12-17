@@ -1,0 +1,23 @@
+#app.lang-enUS {
+    .sidebar-container {
+        width: 255px !important;
+
+        .el-submenu__title {
+            font-size: 12px;
+        }
+
+        .el-submenu .el-menu-item {
+            padding-left: 20px !important;
+            min-width: 255px;
+            height: 44px;
+            line-height: 44px;
+            font-size: 12px;
+        }
+    }
+
+
+    .main-container {
+        margin-left: 255px;
+    }
+    
+}

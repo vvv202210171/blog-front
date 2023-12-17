@@ -1,0 +1,50 @@
+import i18n from '@/locales/index' 
+import { dateTime } from '@/02-utils'
+import config from '@/02-utils/config' // 公用配置文件 config.options(Object) 对象转Options数组
+import { MatchedStatus } from '@/02-utils/keyMaps' // 定义Options对象文件
+export const search = {
+  key: 'value', 
+  IsMatched: -999, //默认参数
+  ...config.params.page, // 分页参数
+  get StartDate() {
+    const [StartDate] = dateTime()
+    return StartDate
+  },
+  get EndDate() {
+    const [, EndDate] = dateTime()
+    return EndDate
+  }
+}
+
+// 过滤条件组件使用 每一个数组占一列
+export const filters = [
+  [
+    { key: '对应接口Key', label: '名称', type: '属性类型 (number | string)', elemName: '组件类型名称 (input | select)', enterTrigger: ' (回车是否触发查询请求 boolean)', clear: '是否显示清空按钮 boolean' },
+    { label: i18n.t('report_0282'), elemName: 'dateTime', start: 'StartDate', end: 'EndDate', format: 'yyyy-MM-dd HH:mm:ss' }, //时间范围选择框
+    { elemName: 'actions' } // 按钮列表占位 例: 查询 ｜ 新增 ｜ 导出
+  ]
+]
+// 过滤条件里面的按钮 
+export const actions = [
+  { key: 'search', elemName: 'button', label: '查询', type: 'primary', icon: 'el-icon-search', actionName: 'search' }
+]
+
+// Table
+// align: '对齐方式 left | center | right 默认:向左对齐'
+// slot: '使用插槽的方式 插槽Key'
+export const report = {
+  expand: [],
+  items: [
+    { label: '列头', key: '对应数据Key', align: 'left', summary: '统计Key', },
+    { headerHtml: '标签列头 <br /> 标签2', align: 'right', slot: 'demo' },
+    { label: '操作', key: 'action', align: 'center' }
+  ],
+  // role: '权限控制Code'
+  // code: '对应模版的方法名称'
+  actions: [
+    { role: '01_0001', code: 'create' }, 
+  ]
+}
+
+export default { filters, actions, report }
+
