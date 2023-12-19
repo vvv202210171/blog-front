@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'CommonBiz Admin',
+  title: '泉湉博客管理后台',
 
   /**
    * @type {boolean} true | false

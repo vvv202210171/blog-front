@@ -41,18 +41,10 @@ module.exports = {
       errors: true,
     },
     proxy: {
-      "/mc_api": {
-        target: "http://147.124.223.229:40020",
+      "/admin": {
+        target: "http://127.0.0.1:8090",
         changeOrigin: true,
-      },
-      "/rp_api": {
-        target: "http://147.124.223.229:40030",
-        changeOrigin: true,
-      },
-      "/tp_api": {
-        target: "http://147.124.223.229:40051",
-        changeOrigin: true,
-      },
+      }
     },
     // before: require('./mock/mock-server.js')
   },

@@ -1,21 +1,10 @@
 import request from '@/02-utils/request'
 
-// 获取当前登陆用户的权限详情
-export function getUserCurrentPermission() {
-  return request({
-    url: '/rp_api/user/currentpermission',
-    method: 'get'
-  })
-}
+
 // Admin 后台用户登录接口
-export function adminLogin(data = {
-  'MerchantAlias': '', // 商户编号
-  'UserName': '', // 用户名
-  'Password': '', // 登录密码
-  'GoogleVerifyCode': '' // google验证码
-}) {
+export function adminLogin(data) {
   return request({
-    url: '/mc_api/login',
+    url: '/admin/login',
     method: 'post',
     data
   })

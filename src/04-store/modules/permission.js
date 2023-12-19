@@ -1,4 +1,3 @@
-import { getUserCurrentPermission } from "@/03-api/admin";
 import router from "@/05-router";
 import Layout from "@/layout";
 const state = {
@@ -30,7 +29,7 @@ const actions = {
   // A0007  内容管理  品牌站推荐管理  Brand Management  /content/brandManagement
   async generateRoutes({ commit }) {
     try {
-      let res = await getUserCurrentPermission();
+      let res = [];
       commit("SET_ROLES", res);
       let _baseIndex = 0;
       const defaultRoutes = [
@@ -43,6 +42,7 @@ const actions = {
           hidden: true,
           FunctionList: [],
         },
+
         {
           AdminMenuCode: "A0007",
           AdminMenuName: "新增文章",
@@ -51,25 +51,7 @@ const actions = {
           RouteName: "/content/Add",
           hidden: true,
           FunctionList: [],
-        },
-        {
-          AdminMenuCode: "A0007",
-          AdminMenuName: "新增广告",
-          PageName: "新增广告",
-          PageName_enUS: "Advertising Management",
-          RouteName: "/content/advertisingManagementAdd",
-          hidden: true,
-          FunctionList: [],
-        },
-        {
-          AdminMenuCode: "A0007",
-          AdminMenuName: "编辑广告",
-          PageName: "编辑广告",
-          PageName_enUS: "Advertising Management",
-          RouteName: "/content/advertisingManagementUpdate",
-          hidden: true,
-          FunctionList: [],
-        },
+        }
       ];
       res = res.concat(defaultRoutes);
       const routes = res.reduce((prev, curr, index) => {

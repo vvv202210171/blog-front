@@ -1,10 +1,9 @@
 import axios from "axios";
-import qs from "qs";
 import i18n from "@/locales/index";
 import { MessageBox, Message } from "element-ui";
 import store from "@/04-store";
 import router from "@/05-router/index";
-
+import { getToken } from '@/02-utils/auth'
 // create an axios instance
 const service = axios.create({
   baseURL: "", // url = base url + request url
@@ -20,14 +19,13 @@ service.interceptors.request.use(
     if (config.isFormRequest) {
       //  config.headers["Content-Type"] = "multipart/form-data";
     }
-
+    config.headers["satoken"] = getToken();
     if (config.isFormRequest) {
       const fromData = new FormData();
       const params = { ...config.data };
       for (const [key, value] of Object.entries(params)) {
         fromData.append(key, value);
       }
-      console.log(params, fromData);
       config.data = fromData;
     }
     return config;
@@ -55,12 +53,7 @@ service.interceptors.response.use(
     const res = response.data;
     if (res.code) {
       if (res.code !== 0) {
-        if (res.code === 19) {
-          if (router.currentRoute.name !== "Forbidden") {
-            router.push("/forbidden");
-          }
-          return res;
-        } else if (res.code === 101) {
+        if (res.code === 101) {
           store.commit("app/CLEART_INC");
           if (router.currentRoute.name === "Login") return;
           MessageBox.confirm(i18n.t("common_0027"), i18n.t("common_0028"), {
@@ -86,15 +79,6 @@ service.interceptors.response.use(
         }
         return Promise.reject(new Error(res.msg || "Error"));
       }
-    } else if (res.errno) {
-      if (res.errno != 0) {
-        Message({
-          message: res.message || "Error",
-          type: "error",
-          duration: 5 * 1000,
-        });
-      }
-      return Promise.reject(new Error(res.msg || "Error"));
     }
     if (response.config.isAction) {
       return res;

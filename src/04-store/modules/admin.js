@@ -29,6 +29,7 @@ const state = {
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
+    alert(token)
     setToken(token)
   },
   REMOVE_TOKEN: (state) => {
@@ -79,11 +80,9 @@ const actions = {
   // user login
   async login({ commit, dispatch }, params) {
     try {
-      const _params = { ...params }
-      delete _params.lang
-      const res = await adminLogin(_params)
-      commit('SET_USERINFO', res)
-      commit('SET_TOKEN', res.SessionId)
+      const res = await adminLogin(params)
+      commit('SET_USERINFO', res.user)
+      commit('SET_TOKEN', res.token)
       return await dispatch('permission/generateRoutes', {}, { root: true })
     } catch (error) {
       return false
