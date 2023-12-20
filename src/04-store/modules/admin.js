@@ -11,7 +11,7 @@ const user = LocalStore.get('user') || {
   MerchantAlias: '',
   MerchantName: '',
   SessionId: '',
-  UserName: ''
+  username: ''
 }
 const state = {
   token: getToken(),

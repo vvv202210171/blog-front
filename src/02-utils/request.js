@@ -53,7 +53,7 @@ service.interceptors.response.use(
     const res = response.data;
     if (res.code) {
       if (res.code !== 0) {
-        if (res.code === 101) {
+        if (res.code === 7) {
           store.commit("app/CLEART_INC");
           if (router.currentRoute.name === "Login") return;
           MessageBox.confirm(i18n.t("common_0027"), i18n.t("common_0028"), {

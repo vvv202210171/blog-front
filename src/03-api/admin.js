@@ -21,19 +21,21 @@ export function checkSession() {
 //	•	获取用户在线登录终端详情列表接口
 export function getLoginInfo() {
   return request({
-    url: '/mc_api/logininfo',
+    url: '/admin/profile',
     method: 'get'
   })
 }
-
-//	•	当前用户登录密码重置接口
-export function changeUserPassword(data = {
-  OldPassword: '', // 旧密码
-  NewPassword: '', // 新密码
-  GoogleVerifyCode: '' // OPT验证码
-}, extend) {
+export function reg(data) {
   return request({
-    url: '/mc_api/userpasswordchange',
+    url: '/admin/register',
+    method: 'post',
+    data
+  })
+}
+//	•	当前用户登录密码重置接口
+export function changeUserPassword(data) {
+  return request({
+    url: '/admin/edit_pwd',
     method: 'post',
     data,
     ...extend

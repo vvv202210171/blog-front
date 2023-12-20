@@ -87,7 +87,7 @@ export function check(data = {}, extend) {
 
 export function logout(data = {}, extend) {
   return request({
-    url: '/mc_api/logout',
+    url: '/admin/logout',
     method: 'post',
     data,
     ...extend
