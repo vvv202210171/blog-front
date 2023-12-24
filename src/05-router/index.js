@@ -63,6 +63,12 @@ export const constantRoutes = [
         name: "Main",
         meta: { title: i18n.t("common_0031"), icon: "main", affix: true },
       },
+      {
+        path: "info",
+        component: () => import("@/06-views/info"),
+        name: "info",
+        meta: { title: "个人信息", icon: "info", affix: true },
+      },
     ],
   },
   {

@@ -35,6 +35,15 @@ const actions = {
       const defaultRoutes = [
         {
           AdminMenuCode: "A0007",
+          AdminMenuName: "文章管理",
+          PageName: "编辑文章",
+          PageName_enUS: "Article management",
+          RouteName: "/content/Update",
+          hidden: true,
+          FunctionList: [],
+        },
+        {
+          AdminMenuCode: "A0007",
           AdminMenuName: "编辑文章",
           PageName: "编辑文章",
           PageName_enUS: "Article management",

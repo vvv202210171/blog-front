@@ -104,3 +104,11 @@ export function waitRecordCount(data = {}, extend) {
   })
 }
 
+export function uploadFile(data) {
+  return request({
+    url: "/admin/upload/img",
+    method: "post",
+    data,
+    isFormRequest: true,
+  });
+}

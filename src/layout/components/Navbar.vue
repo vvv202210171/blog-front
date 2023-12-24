@@ -53,6 +53,11 @@
           <!-- <el-tooltip content="Global Size" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip> -->
+          <el-image
+            style="width: 42px; height: 42px; border-radius: 100%"
+            :src="user.userAvatar"
+          >
+          </el-image>
         </template>
         <el-dropdown
           class="avatar-container right-menu-item hover-effect"
@@ -151,6 +156,9 @@ export default {
     clearInterval(timer);
   },
   methods: {
+    info() {
+      this.$router.push({ path: "/info" });
+    },
     music() {
       // setInterval(this.waitRecordCount(), 5000)
       if (this.showMusic) {
