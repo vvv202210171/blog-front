@@ -66,6 +66,14 @@ export const MENU_LIST = [
     path: "/category/index",
   },
   {
+    id: 8,
+    parentId: 1,
+    name: "tag",
+    menuName: "全部标签",
+    hidden: false,
+    path: "/tag/index",
+  },
+  {
     id: 4,
     parentId: 0,
     menuName: "页面",

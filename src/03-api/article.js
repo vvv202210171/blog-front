@@ -32,6 +32,30 @@ export function deleteArticleType(params, isAction = true) {
     isAction
   });
 }
+export function addArticleTag(data, isAction = true) {
+  return request({
+    url: "/admin/tag/add",
+    method: "post",
+    data,
+    isAction
+  });
+}
+export function updateArticleTag(data, isAction = true) {
+  return request({
+    url: "/admin/tag/update",
+    method: "post",
+    data,
+    isAction
+  });
+}
+export function deleteArticleTag(params, isAction = true) {
+  return request({
+    url: "/admin/tag/delete",
+    method: "get",
+    params,
+    isAction
+  });
+}
 
 export function getArticleTypeListCount() {
   return request({
@@ -39,7 +63,13 @@ export function getArticleTypeListCount() {
     method: "get",
   });
 }
+export function getArticleTagListCount() {
+  return request({
+    url: "/admin/tag/list_count",
+    method: "get",
+  });
 
+}
 export function uploadFile(formData) {
   return request({
     url: "/mc_api/content/images_upload",
