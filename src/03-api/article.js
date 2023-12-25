@@ -2,10 +2,44 @@ import request from "@/02-utils/request";
 
 export function getArticleTypeList() {
   return request({
-    url: "/mc_api/article/article_category_get",
-    method: "post",
+    url: "/admin/category/list",
+    method: "get",
   });
 }
+
+export function addArticleType(data, isAction = true) {
+  return request({
+    url: "/admin/category/add",
+    method: "post",
+    data,
+    isAction
+  });
+}
+
+export function updateArticleType(data, isAction = true) {
+  return request({
+    url: "/admin/category/update",
+    method: "post",
+    data,
+    isAction
+  });
+}
+export function deleteArticleType(params, isAction = true) {
+  return request({
+    url: "/admin/category/delete",
+    method: "get",
+    params,
+    isAction
+  });
+}
+
+export function getArticleTypeListCount() {
+  return request({
+    url: "/admin/category/list_count",
+    method: "get",
+  });
+}
+
 export function uploadFile(formData) {
   return request({
     url: "/mc_api/content/images_upload",
@@ -48,32 +82,5 @@ export function getArticleById(data) {
   });
 }
 
-//广告列表
-export function getAdvertiseList(data) {
-  return request({
-    url: "/rp_api/advertise/advertise_list",
-    method: "post",
-    data,
-  });
-}
-
-//查询单条广告
-export function getAdvertiseById(data) {
-  return request({
-    url: "/rp_api/advertise/advertise_get",
-    method: "post",
-    data,
-  });
-}
-
-//广告新增
-export function mergeAdvertise(data) {
-  return request({
-    url: "/mc_api/advertise/advertise_merge",
-    method: "post",
-    data,
-    isFormRequest: true,
-  });
-}
 
 

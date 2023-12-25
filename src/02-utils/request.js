@@ -51,6 +51,7 @@ service.interceptors.response.use(
    */
   (response) => {
     const res = response.data;
+    console.log(response)
     if (res.code) {
       if (res.code !== 0) {
         if (res.code === 7) {

@@ -1,5 +1,6 @@
 import router from "@/05-router";
 import Layout from "@/layout";
+import { MENU_LIST } from "@/02-utils/enum";
 const state = {
   routes: [],
   roles: [],
@@ -19,6 +20,40 @@ function _import(file) {
   return (resolve) => require([`@/06-views${file}.vue`], resolve);
 }
 
+// 转换为路由格式的对象
+function convertToRoutes(menuList) {
+  const routeMap = {};
+  // 先创建所有的路由对象
+  let index = 0;
+  const routeArr = menuList.map((menuItem) => {
+    const router = {
+      path: menuItem.path,
+      name: menuItem.name,
+      meta: {
+        title: menuItem.menuName,
+        hidden: menuItem.hidden,
+        parentId: menuItem.parentId,
+        icon: menuItem.icon,
+        index: "" + index++
+      }
+    }
+    if (menuItem.parentId == 0) {
+      router.children = [];
+      router.component = Layout
+      routeMap[menuItem.id] = router;
+      return null;
+    } else {
+      router.component = _import(menuItem.path)
+    }
+    return router
+  });
+  index = 0;
+  routeArr.filter(v => v != null).forEach(r => {
+    routeMap[r.meta.parentId].children.push(r);
+  });
+
+  return Object.values(routeMap);
+}
 const actions = {
   //   AdminMenuCode  AdminMenuName  PageName  PageName_enUS  RouteName
   // A0006  站点管理  基础设置  Basic Setting  /site/basicSetting
@@ -27,79 +62,14 @@ const actions = {
   // A0007  内容管理  轮播图管理  Carousel Management  /content/carouselManagement
   // A0007  内容管理  广告管理  Advertising Management  /content/advertisingManagement
   // A0007  内容管理  品牌站推荐管理  Brand Management  /content/brandManagement
-  async generateRoutes({ commit }) {
+  async generateRoutes({ commit, dispatch }) {
     try {
       let res = [];
-      commit("SET_ROLES", res);
-      let _baseIndex = 0;
-      const defaultRoutes = [
-        {
-          AdminMenuCode: "A0007",
-          AdminMenuName: "文章管理",
-          PageName: "编辑文章",
-          PageName_enUS: "Article management",
-          RouteName: "/content/Update",
-          hidden: true,
-          FunctionList: [],
-        },
-        {
-          AdminMenuCode: "A0007",
-          AdminMenuName: "编辑文章",
-          PageName: "编辑文章",
-          PageName_enUS: "Article management",
-          RouteName: "/content/Update",
-          hidden: true,
-          FunctionList: [],
-        },
 
-        {
-          AdminMenuCode: "A0007",
-          AdminMenuName: "新增文章",
-          PageName: "新增文章",
-          PageName_enUS: "Article management",
-          RouteName: "/content/Add",
-          hidden: true,
-          FunctionList: [],
-        }
-      ];
-      res = res.concat(defaultRoutes);
-      const routes = res.reduce((prev, curr, index) => {
-        if (!prev[curr.AdminMenuCode]) {
-          _baseIndex++;
-        }
-        const childRoute = {
-          path: curr.RouteName,
-          component: _import(curr.RouteName),
-          name: curr.PageName,
-          hidden: curr.hidden ? curr.hidden : false,
-          meta: {
-            title: curr.PageName,
-            index: `${_baseIndex}-${index}`,
-            roles: curr.FunctionList.reduce((prev, curr) => {
-              prev[curr.PageFunctionCode] = curr;
-              return prev;
-            }, {}),
-          },
-        };
-        if (prev[curr.AdminMenuCode]) {
-          prev[curr.AdminMenuCode].children.push(childRoute);
-        } else {
-          prev[curr.AdminMenuCode] = {
-            path: "/",
-            component: Layout,
-            name: curr.AdminMenuName,
-            meta: {
-              index: "" + _baseIndex,
-              title: curr.AdminMenuName,
-              icon: curr.icon,
-            },
-            children: [childRoute],
-          };
-        }
-
-        return prev;
-      }, {});
-      const routeList = Object.values(routes);
+      //await dispatch("admin/loginInfo")
+      dispatch("admin/loginInfo", null, { root: true })
+      const routeList = convertToRoutes(MENU_LIST);
+      console.log(routeList)
       routeList.unshift({
         path: "/502",
         hidden: true,
@@ -107,6 +77,7 @@ const actions = {
       commit("SET_ROUTES", routeList);
       return true;
     } catch (error) {
+      console.error(error)
       return false;
     }
   },

@@ -25,6 +25,17 @@ export function getLoginInfo() {
     method: 'get'
   })
 }
+//	•	获取用户在线登录终端详情列表接口
+export function saveInfo(data, isAction = true) {
+
+  return request({
+    url: '/admin/profile/save',
+    method: 'post',
+    data,
+    isAction
+
+  })
+}
 export function reg(data) {
   return request({
     url: '/admin/register',
@@ -33,11 +44,11 @@ export function reg(data) {
   })
 }
 //	•	当前用户登录密码重置接口
-export function changeUserPassword(data) {
+export function changeUserPassword(data, isAction = true) {
   return request({
     url: '/admin/edit_pwd',
     method: 'post',
     data,
-    ...extend
+    isAction
   })
 }

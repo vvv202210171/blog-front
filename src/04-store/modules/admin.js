@@ -1,4 +1,4 @@
-import { adminLogin } from '@/03-api/admin'
+import { adminLogin, getLoginInfo } from '@/03-api/admin'
 import { currencyList, paytypeList, cashoutTypeList, bankList, spiderAccountList, qrSpiderAccountList, bankcardSpiderAccountList, trueMoneyAccountList } from '@/03-api/common'
 import { getToken, setToken, removeToken } from '@/02-utils/auth'
 import { resetRouter } from '@/05-router'
@@ -29,7 +29,6 @@ const state = {
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
-    alert(token)
     setToken(token)
   },
   REMOVE_TOKEN: (state) => {
@@ -88,124 +87,15 @@ const actions = {
       return false
     }
   },
-
-  async loadCurrencyList({ commit, state }) {
+  async loginInfo({ commit }) {
     try {
-      if (!state.user.IsSuper) return true
-      if (LocalStore.get('currency')) {
-        commit('SET_CURRENCY', LocalStore.get('currency'))
-      }
-      const data = await currencyList()
-      commit('SET_CURRENCY', data)
+      const user = await getLoginInfo()
+      commit('SET_USERINFO', user)
       return true
     } catch (error) {
-      console.log(error)
       return false
     }
   },
-
-  async loadSpiderAccountList({ commit, state }) {
-    try {
-      if (!state.user.IsSuper) return true
-      if (LocalStore.get('spideraccountlist')) {
-        commit('SET_SPIDERACCOUNTLIST', LocalStore.get('spideraccountlist'))
-      }
-      const data = await spiderAccountList()
-      commit('SET_SPIDERACCOUNTLIST', data)
-      return true
-    } catch (error) {
-      console.log(error)
-      return false
-    }
-  },
-
-  async loadQRSpiderAccountList({ commit, state }) {
-    try {
-      if (!state.user.IsSuper) return true
-      if (LocalStore.get('qrspideraccountlist')) {
-        commit('SET_QRSPIDERACCOUNTLIST', LocalStore.get('qrspideraccountlist'))
-      }
-      const data = await qrSpiderAccountList()
-      commit('SET_QRSPIDERACCOUNTLIST', data)
-      return true
-    } catch (error) {
-      console.log(error)
-      return false
-    }
-  },
-
-  async loadBankCardSpiderAccountList({ commit, state }) {
-    try {
-      if (!state.user.IsSuper) return true
-      if (LocalStore.get('bankcardspideraccountlist')) {
-        commit('SET_BANKCARDSPIDERACCOUNTLIST', LocalStore.get('bankcardspideraccountlist'))
-      }
-      const data = await bankcardSpiderAccountList()
-      commit('SET_BANKCARDSPIDERACCOUNTLIST', data)
-      return true
-    } catch (error) {
-      console.log(error)
-      return false
-    }
-  },
-
-  async loadTrueMoneyAccountList({ commit, state }) {
-    try {
-      if (!state.user.IsSuper) return true
-      if (LocalStore.get('truemoneyaccountlist')) {
-        commit('SET_TRUEMONEYACCOUNTLIST', LocalStore.get('truemoneyaccountlist'))
-      }
-      const data = await trueMoneyAccountList()
-      commit('SET_TRUEMONEYACCOUNTLIST', data)
-      return true
-    } catch (error) {
-      console.log(error)
-      return false
-    }
-  },
-
-  async loadPayTypeList({ commit }) {
-    try {
-      if (LocalStore.get('payTypeList')) {
-        commit('SET_PAYTYPE_LIST', LocalStore.get('payTypeList'))
-      }
-      const data = await paytypeList()
-      commit('SET_PAYTYPE_LIST', data)
-      return true
-    } catch (error) {
-      console.log(error)
-      return false
-    }
-  },
-
-  async loadCashoutTypeList({ commit }) {
-    try {
-      if (LocalStore.get('cashoutTypeList')) {
-        commit('SET_CASHOUTTYPE_LIST', LocalStore.get('cashoutTypeList'))
-      }
-      const data = await cashoutTypeList()
-      commit('SET_CASHOUTTYPE_LIST', data)
-      return true
-    } catch (error) {
-      console.log(error)
-      return false
-    }
-  },
-
-  async loadBankList({ commit }) {
-    try {
-      if (LocalStore.get('bankList')) {
-        commit('SET_BANK_LIST', LocalStore.get('bankList'))
-      }
-      const data = await bankList()
-      commit('SET_BANK_LIST', data)
-      return true
-    } catch (error) {
-      console.log(error)
-      return false
-    }
-  },
-
   // user logout
   async logout({ commit, state, dispatch }) {
     commit('REMOVE_TOKEN')

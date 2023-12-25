@@ -10,7 +10,7 @@
           >编辑</el-button
         >
       </div>
-      <el-form label-suffix="：">
+      <el-form label-suffix="：" key="infoKey">
         <el-form-item label="头像">
           <el-image
             style="width: 100px; height: 100px"
@@ -39,7 +39,7 @@
         <el-form-item label="最后登录IP">
           <span>{{ user.userUrl }}</span>
         </el-form-item>
-        <el-form-item label="状态" prop="userStatus">
+        <el-form-item label="状态">
           <span>{{ user.userStatus | statusFormat }}</span>
         </el-form-item>
       </el-form>
@@ -60,6 +60,7 @@
         :model="form"
         label-width="100px"
         size="medium"
+        key="form"
       >
         <el-form-item class="" label="头像" prop="userAvatar">
           <el-upload
@@ -118,7 +119,7 @@
 </template>
 
 <script>
-import { changeUserPassword } from "@/03-api/admin";
+import { saveInfo } from "@/03-api/admin";
 import { uploadFile } from "@/03-api/common";
 import { UserStatusEnum } from "@/02-utils/enum";
 import { mapGetters } from "vuex";
@@ -168,9 +169,7 @@ export default {
   },
   created() {},
   methods: {
-    handler() {
-      alert(1);
-    },
+    handler() {},
     loadUser() {
       this.isRead = false;
       for (const key in this.form) {
@@ -184,21 +183,23 @@ export default {
     },
     confirm() {
       this.$refs.form.validate(async (valid) => {
-        alert(valid);
         if (valid) {
-          this.loading = true;
-          const param = { ...this.form };
           try {
-            const { code, msg } = await changeUserPassword(param, {
-              isAction: true,
-            });
+            this.loading = true;
+            let param = { ...this.form };
+
+            param.userId = this.user.userId;
+            const { code } = await saveInfo(param);
             this.loading = false;
             if (code === 0) {
-              const _msg = msg || this.$t("common_0052");
-              this.$message.success(_msg);
-              this.dialogFormVisible = false;
+              this.$message.success("修改成功");
+              this.$store.dispatch("admin/loginInfo").then((r) => {
+                this.isRead = true;
+              });
             }
           } catch (error) {
+            this.loading = false;
+          } finally {
             this.loading = false;
           }
         }

@@ -121,9 +121,7 @@ export default {
           this.loading = true;
           const param = { ...this.form };
           try {
-            const { code, msg } = await changeUserPassword(param, {
-              isAction: true,
-            });
+            const { code, msg } = await changeUserPassword(param);
             this.loading = false;
             if (code === 0) {
               const _msg = msg || this.$t("common_0052");
