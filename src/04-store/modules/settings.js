@@ -8,7 +8,8 @@ const state = {
   showSettings: showSettings,
   tagsView: tagsView,
   fixedHeader: fixedHeader,
-  sidebarLogo: sidebarLogo
+  sidebarLogo: sidebarLogo,
+  imgUrl: 'http://s5zzjcupl.hn-bkt.clouddn.com/'
 }
 
 const mutations = {

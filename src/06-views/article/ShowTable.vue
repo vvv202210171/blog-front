@@ -9,7 +9,10 @@
         show-overflow-tooltip
       >
         <template #default="scope">
-          <el-image class="img" :src="scope.row.ImgUrl"></el-image>
+          <el-image
+            class="img"
+            :src="imgUrl + scope.row.articleThumbnail"
+          ></el-image>
           <!-- <div class="title">
             <el-image class="img" :src="scope.row.ImgUrl"></el-image>
             <div class="text">
@@ -20,7 +23,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="Title"
+        prop="articleTitle"
         label="标题"
         min-width="180"
         show-overflow-tooltip
@@ -31,40 +34,66 @@
         label="所属类别"
         show-overflow-tooltip
       >
-      </el-table-column>
-      <el-table-column prop="SortId" label="排序" show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column prop="Click" label="浏览量" show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column prop="Status" label="状态">
         <template #default="scope">
-          <el-button :type="scope.row.Status == 1 ? 'success' : 'danger'">{{
-            scope.row.Status | statusFormat
-          }}</el-button>
+          <div>
+            <span
+              v-for="(item, index) in scope.row.categoryList"
+              :key="item.categoryId"
+            >
+              <span>{{ item.categoryName }}</span>
+              <el-divider
+                direction="vertical"
+                v-if="scope.row.categoryList.length - 1 != index"
+              ></el-divider>
+            </span>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column prop="AddTime" label="发布时间" show-overflow-tooltip>
+
+      <el-table-column prop="Status" label="状态">
+        <template #default="scope">
+          <el-button
+            class="btn"
+            :type="scope.row.articleStatus == 1 ? 'success' : 'danger'"
+            >{{ scope.row.articleStatus | statusFormat }}</el-button
+          >
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="articleCreateTime"
+        label="发布时间"
+        show-overflow-tooltip
+      >
+        <template #default="scope">
+          <span>{{ scope.row.articleCreateTime | parseTime }}</span>
+        </template>
       </el-table-column>
 
       <el-table-column prop="address" label="操作" min-width="50">
-        <template #default="scope">
-          <!-- <el-button
+        <!-- <el-button
             size="mini"
             icon="el-icon-document-copy"
             @click="copy(scope.row)"
           ></el-button> -->
+        <template #default="scope">
           <el-button
             size="mini"
-            icon="el-icon-edit"
+            class="btn"
+            type="primary"
             @click="edit(scope.row)"
-          ></el-button>
-          <!-- <el-button
+            >编辑</el-button
+          >
+          <el-button
             size="mini"
-            icon="el-icon-delete"
+            class="btn"
             type="danger"
+            v-if="!scope.row.children || scope.row.children.length == 0"
             @click="del(scope.row)"
-          ></el-button> -->
+            >删除</el-button
+          >
         </template>
+      </el-table-column>
+      <el-table-column prop="articleId" label="ID" show-overflow-tooltip>
       </el-table-column>
     </el-table>
   </div>
@@ -91,7 +120,11 @@ export default {
       ArticleStatusEnum: ArticleStatusEnum,
     };
   },
-  computed: {},
+  computed: {
+    imgUrl() {
+      return this.$store.state.settings.imgUrl;
+    },
+  },
   created() {},
   methods: {
     copy(row) {},

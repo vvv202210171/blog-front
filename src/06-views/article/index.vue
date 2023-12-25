@@ -28,7 +28,7 @@
           <el-form-item label="标题">
             <el-input
               placeholder="请输入标题"
-              v-model="params.Title"
+              v-model="params.articleTitle"
               @change="query"
               class="input-with-select"
               size="medium"
@@ -50,11 +50,11 @@
         </div>
         <div class="list-r">
           <el-button-group>
-            <!-- <el-button
+            <el-button
               size="medium"
               icon="el-icon-document"
               @click="showTableStyle = !showTableStyle"
-            ></el-button> -->
+            ></el-button>
             <el-button
               size="medium"
               :icon="isExpand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"
@@ -65,16 +65,6 @@
       </div>
       <div class="list" v-if="isExpand">
         <div class="list-l">
-          <el-form-item label="筛选类别">
-            <SelectTree
-              :treeData="cates"
-              v-model="params.categoryId"
-              @change="changeCate"
-            />
-          </el-form-item>
-        </div>
-
-        <div class="list-m">
           <el-form-item label="发布日期">
             <el-date-picker
               v-model="publishDate"
@@ -93,12 +83,12 @@
       <ShowTable :tableData="list" :loading="loading"></ShowTable>
     </div>
     <div class="list-container" v-else>
-      <ShowList></ShowList>
+      <ShowList :tableData="list"></ShowList>
     </div>
     <div class="page">
       <Pagination
         :total="total"
-        :page="params.pageNumber"
+        :page="params.pageIndex"
         :limit="params.pageSize"
         @pagination="pageChange"
       />
@@ -107,24 +97,15 @@
 </template>
 
 <script>
-// /rp_api/article/article_list   查询文章列表
-// 参数： long categoryId, long Id, DateTime
-//addTimeFrom, DateTime addTimeTo, int pageNumber , int pageSize
-// 返回： new object[] { list (List<Article>), totalCount --总数 }
-
-// /rp_api/article/article_get   查询单条文章
-// 参数：long Id
-// 返回：Article
 import ShowTable from "./ShowTable.vue";
 import ShowList from "./ShowList.vue";
-import { getArticleList, getArticleTypeList } from "@/03-api/article";
+import { getArticleList } from "@/03-api/article";
 import Pagination from "@/01-components/Pagination";
-import SelectTree from "@/01-components/SelectTree";
 import dayjs from "dayjs";
 const format = "YYYY-MM-DD HH:mm:ss";
 
 export default {
-  components: { ShowTable, ShowList, Pagination, SelectTree },
+  components: { ShowTable, ShowList, Pagination },
   data() {
     return {
       list: [],
@@ -133,34 +114,23 @@ export default {
       showTableStyle: true,
       isExpand: false,
       cates: [],
-      publishDate: [
-        dayjs().subtract(7, "day").format(format),
-        dayjs().format(format),
-      ],
+      publishDate: [],
       params: {
         Id: "",
-        Title: "",
-        pageNumber: 1,
-        pageSize: 20,
-        categoryId: [-1],
+        articleTitle: "",
+        pageIndex: 1,
+        pageSize: 8,
       },
 
       submiting: false,
       showAdd: false,
     };
   },
-  computed: {},
+
   created() {
     this.loadList();
-    this.loadArticleTypeList();
   },
   methods: {
-    async loadArticleTypeList() {
-      const data = await getArticleTypeList();
-      data.unshift({ Depth: 1, Id: -1, ParentId: 0, Title: "全部" });
-      this.cates = this.buildTree(data);
-      this.params.categoryId = [-1];
-    },
     buildTree(data) {
       const tree = [];
       const map = {};
@@ -180,50 +150,42 @@ export default {
       return tree;
     },
     pageChange(page) {
-      this.params.pageNumber = page.limit;
-      this.params.pageSize = page.size;
+      console.log(page);
+      this.params.pageIndex = page.page;
+      this.params.pageSize = page.limit;
       this.loadList();
     },
     changeCate(v) {
       this.params.categoryId = v;
     },
     query() {
-      this.params.pageNumber = 1;
+      this.params.pageIndex = 1;
       this.loadList();
     },
     async loadList() {
-      let cateLen = this.params.categoryId.length;
       let dateLen = this.publishDate ? this.publishDate.length : 0;
-      let cateId = 0;
-      if (cateLen > 0 && this.params.categoryId[cateLen - 1] != -1) {
-        cateId = this.params.categoryId[cateLen - 1];
-      }
+
       let data = {
-        pageNumber: this.params.pageNumber,
+        pageIndex: this.params.pageIndex,
         pageSize: this.params.pageSize,
-        categoryId: cateId,
-        Id: this.params.Id ? this.params.Id : 0,
-        Title: this.params.Title,
-        addTimeFrom:
-          dateLen == 2
-            ? dayjs(this.publishDate[0]).format(format)
-            : dayjs().subtract(7, "day").format(format),
-        addTimeTo:
-          dateLen == 2
-            ? dayjs(this.publishDate[1]).format(format)
-            : dayjs().format(format),
+        articleId: this.params.Id ? this.params.Id : 0,
+        articleTitle: this.params.articleTitle,
+        startTime:
+          dateLen == 2 ? dayjs(this.publishDate[0]).format(format) : null,
+        endTime:
+          dateLen == 2 ? dayjs(this.publishDate[1]).format(format) : null,
       };
       try {
         this.loading = true;
         const resData = await getArticleList(data);
-        this.list = resData[0];
-        this.total = resData[1];
+        this.list = resData.records;
+        this.total = resData.total;
       } finally {
         this.loading = false;
       }
     },
     add() {
-      this.$router.push({ path: "/content/add", query: { isAdd: true } });
+      this.$router.push({ path: "/article/Add", query: { isAdd: true } });
     },
   },
 };

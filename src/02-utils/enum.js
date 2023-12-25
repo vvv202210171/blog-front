@@ -1,18 +1,13 @@
 export const ArticleStatusEnum = [
   {
-    name: "正常",
+    name: "已发布",
     code: "Enable",
     val: 1,
   },
   {
-    name: "待审核",
-    code: "PendingReview",
-    val: 2,
-  },
-  {
-    name: "已删除",
-    code: "Deleted",
-    val: 99,
+    name: "草稿",
+    code: "Disable",
+    val: 0,
   },
 ];
 

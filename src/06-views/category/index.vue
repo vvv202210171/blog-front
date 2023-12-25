@@ -214,9 +214,6 @@ export default {
     border-bottom: none;
   }
   .table {
-    .btn {
-      padding: 4px 7px;
-    }
   }
   .card {
     margin-left: 20px;

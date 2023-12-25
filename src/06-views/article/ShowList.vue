@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-row :gutter="20">
-      <el-col :span="6"
+      <el-col :span="6" v-for="item in tableData" :key="item.articleId"
         ><div class="grid-content">
           <el-card :body-style="{ padding: '0px' }" style="height: 100%">
-            <el-image class="pic">
+            <el-image class="pic" :src="imgUrl + item.articleThumbnail">
               <div
                 slot="error"
                 class="image-slot"
@@ -21,157 +21,28 @@
               </div>
             </el-image>
 
-            <div class="grid-content-check">
-              <el-checkbox v-model="checked"></el-checkbox>
-            </div>
             <i class="absbg"></i>
             <h1 class="grid-content-title">
-              <span><a>文章标题</a></span>
-            </h1>
-            <div class="remark"><span>调用别名asdasdasdad</span></div>
-            <div class="tools">
-              <el-tag type="">标签你好</el-tag><el-tag type="">在线音乐</el-tag
-              ><el-tag type="">在线音乐</el-tag
-              ><el-tag type="">在线音乐</el-tag>
-            </div>
-
-            <div class="bottom grid-conten-bottom">
-              <time class="time">2022-01-01 11:11:11</time>
-              <div class="grid-content-bottom-link">
-                <el-link icon="el-icon-document-copy"></el-link>
-                <el-link icon="el-icon-edit"></el-link>
-                <el-link icon="el-icon-delete"></el-link>
-              </div>
-            </div>
-          </el-card></div
-      ></el-col>
-      <el-col :span="6"
-        ><div class="grid-content">
-          <el-card :body-style="{ padding: '0px' }" style="height: 100%">
-            <div class="lock">审核中</div>
-
-            <div class="grid-content-check">
-              <el-checkbox v-model="checked"></el-checkbox>
-            </div>
-            <el-image class="pic">
-              <div
-                slot="error"
-                class="image-slot"
-                style="
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  width: 100%;
-                  height: 100%;
-                  color: #ccc;
-                "
+              <span
+                ><a>{{ item.articleTitle }}</a></span
               >
-                <i class="el-icon-picture-outline" style="font-size: 40px"></i>
-              </div>
-            </el-image>
-            <i class="absbg"></i>
-            <h1 class="grid-content-title">
-              <span><a>文章标题</a></span>
             </h1>
-            <div class="remark"><span>调用别名asdasdasdad</span></div>
+            <div class="remark">
+              <span>{{ item.articleSummary }}</span>
+            </div>
             <div class="tools">
-              <el-tag type="">标签你好</el-tag><el-tag type="">在线音乐</el-tag
-              ><el-tag type="">在线音乐</el-tag
-              ><el-tag type="">在线音乐</el-tag>
-            </div>
-
-            <div class="bottom grid-conten-bottom">
-              <time class="time">2022-01-01 11:11:11</time>
-              <div class="grid-content-bottom-link">
-                <el-link icon="el-icon-document-copy"></el-link>
-                <el-link icon="el-icon-edit"></el-link>
-                <el-link icon="el-icon-delete"></el-link>
-              </div>
-            </div>
-          </el-card></div
-      ></el-col>
-      <el-col :span="6"
-        ><div class="grid-content">
-          <el-card :body-style="{ padding: '0px' }" style="height: 100%">
-            <el-image class="pic">
-              <div
-                slot="error"
-                class="image-slot"
-                style="
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  width: 100%;
-                  height: 100%;
-                  color: #ccc;
-                "
+              <el-tag
+                type=""
+                class="tag"
+                v-for="tag in item.tagList"
+                :key="tag.tagId"
+                >{{ tag.tagName }}</el-tag
               >
-                <i class="el-icon-picture-outline" style="font-size: 40px"></i>
-              </div>
-            </el-image>
-
-            <div class="grid-content-check">
-              <el-checkbox v-model="checked"></el-checkbox>
-            </div>
-            <i class="absbg"></i>
-            <h1 class="grid-content-title">
-              <span><a>文章标题</a></span>
-            </h1>
-            <div class="remark"><span>调用别名asdasdasdad</span></div>
-            <div class="tools">
-              <el-tag type="">标签你好</el-tag><el-tag type="">在线音乐</el-tag
-              ><el-tag type="">在线音乐</el-tag
-              ><el-tag type="">在线音乐</el-tag>
             </div>
 
             <div class="bottom grid-conten-bottom">
-              <time class="time">2022-01-01 11:11:11</time>
+              <time class="time">{{ item.articleCreateTime | parseTime }}</time>
               <div class="grid-content-bottom-link">
-                <el-link icon="el-icon-document-copy"></el-link>
-                <el-link icon="el-icon-edit"></el-link>
-                <el-link icon="el-icon-delete"></el-link>
-              </div>
-            </div>
-          </el-card></div
-      ></el-col>
-      <el-col :span="6"
-        ><div class="grid-content">
-          <el-card :body-style="{ padding: '0px' }" style="height: 100%">
-            <el-image class="pic">
-              <div
-                slot="error"
-                class="image-slot"
-                style="
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  width: 100%;
-                  height: 100%;
-                  color: #ccc;
-                "
-              >
-                <i class="el-icon-picture-outline" style="font-size: 40px"></i>
-              </div>
-            </el-image>
-
-            <div class="grid-content-check">
-              <el-checkbox v-model="checked"></el-checkbox>
-            </div>
-            <i class="absbg"></i>
-            <h1 class="grid-content-title">
-              <span><a>文章标题</a></span>
-            </h1>
-            <div class="remark"><span>调用别名asdasdasdad</span></div>
-            <div class="tools">
-              <el-tag type="">标签你好</el-tag><el-tag type="">在线音乐</el-tag
-              ><el-tag type="">在线音乐</el-tag
-              ><el-tag type="">在线音乐</el-tag>
-            </div>
-
-            <div class="bottom grid-conten-bottom">
-              <time class="time">2022-01-01 11:11:11</time>
-              <div class="grid-content-bottom-link">
-                <el-link icon="el-icon-document-copy"></el-link>
                 <el-link icon="el-icon-edit"></el-link>
                 <el-link icon="el-icon-delete"></el-link>
               </div>
@@ -183,10 +54,22 @@
 </template>
 <script>
 export default {
+  props: {
+    tableData: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+  },
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    imgUrl() {
+      return this.$store.state.settings.imgUrl;
+    },
+  },
   created() {},
   methods: {},
 };
@@ -209,6 +92,7 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
   .lock {
     position: absolute;
     display: flex;
@@ -285,6 +169,9 @@ export default {
         text-decoration: none;
       }
     }
+  }
+  .tag {
+    margin-right: 5px;
   }
   .remark {
     display: block;

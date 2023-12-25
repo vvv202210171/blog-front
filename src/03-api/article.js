@@ -79,11 +79,11 @@ export function uploadFile(formData) {
   });
 }
 
-export function getArticleList(data) {
+export function getArticleList(params) {
   return request({
-    url: "/rp_api/article/article_list",
-    method: "post",
-    data,
+    url: "/admin/article/page",
+    method: "get",
+    params,
   });
 }
 export function add(data) {
