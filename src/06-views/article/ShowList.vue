@@ -44,7 +44,7 @@
               <time class="time">{{ item.articleCreateTime | parseTime }}</time>
               <div class="grid-content-bottom-link">
                 <el-link icon="el-icon-edit" @click="edit(item)"></el-link>
-                <el-link icon="el-icon-delete"></el-link>
+                <el-link icon="el-icon-delete" @click="del(item)"></el-link>
               </div>
             </div>
           </el-card></div
@@ -69,6 +69,9 @@ export default {
   methods: {
     edit(row) {
       this.$emit("toEdit", row);
+    },
+    del(row) {
+      this.$emit("toDel", row);
     },
   },
 };
