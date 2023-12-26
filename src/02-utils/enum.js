@@ -47,9 +47,17 @@ export const MENU_LIST = [
   {
     id: 3,
     parentId: 1,
-    name: "article_edit",
+    name: "article_add",
     menuName: "写文章",
     hidden: false,
+    path: "/article/Add",
+  },
+  {
+    id: 9,
+    parentId: 1,
+    name: "article_edit",
+    menuName: "编辑文章",
+    hidden: true,
     path: "/article/Update",
   },
   {

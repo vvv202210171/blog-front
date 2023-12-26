@@ -7,7 +7,7 @@
       :mode="mode"
     />
     <Editor
-      style="height: 500px; overflow-y: hidden"
+      style="height: 300px; overflow-y: hidden"
       v-model="html"
       :defaultConfig="editorConfig"
       :mode="mode"
@@ -20,6 +20,7 @@
 import Vue from "vue";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { uploadFile } from "@/03-api/article";
+let that = null;
 export default Vue.extend({
   components: { Editor, Toolbar },
   props: {
@@ -37,7 +38,7 @@ export default Vue.extend({
         placeholder: "请输入内容...",
         MENU_CONF: {
           uploadImage: {
-            server: "/mc_api/content/images_upload",
+            server: "/admin/upload/img",
             fieldName: "image",
             allowedFileTypes: [
               "image/jpg",
@@ -51,9 +52,9 @@ export default Vue.extend({
               // 自己实现上传，并得到图片 url alt href
               // 最后插入图片
               // 创建 FormData 对象
-              const formData = { image: file };
+              const formData = { file: file, dir: "article/content" };
               const data = await uploadFile(formData);
-              insertFn(data.url, data.alt, data.href);
+              insertFn(data, "", "");
             },
           },
         },
@@ -64,6 +65,7 @@ export default Vue.extend({
   methods: {
     onCreated(editor) {
       this.editor = Object.seal(editor);
+      that = this;
     },
   },
   mounted() {
@@ -74,7 +76,9 @@ export default Vue.extend({
   },
   beforeDestroy() {
     const editor = this.editor;
+    that = null;
     if (editor == null) return;
+
     editor.destroy(); // 组件销毁时，及时销毁编辑器
   },
   watch: {

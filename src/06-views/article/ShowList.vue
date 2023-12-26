@@ -4,7 +4,7 @@
       <el-col :span="6" v-for="item in tableData" :key="item.articleId"
         ><div class="grid-content">
           <el-card :body-style="{ padding: '0px' }" style="height: 100%">
-            <el-image class="pic" :src="imgUrl + item.articleThumbnail">
+            <el-image class="pic" :src="item.articleThumbnail">
               <div
                 slot="error"
                 class="image-slot"
@@ -43,7 +43,7 @@
             <div class="bottom grid-conten-bottom">
               <time class="time">{{ item.articleCreateTime | parseTime }}</time>
               <div class="grid-content-bottom-link">
-                <el-link icon="el-icon-edit"></el-link>
+                <el-link icon="el-icon-edit" @click="edit(item)"></el-link>
                 <el-link icon="el-icon-delete"></el-link>
               </div>
             </div>
@@ -65,13 +65,12 @@ export default {
   data() {
     return {};
   },
-  computed: {
-    imgUrl() {
-      return this.$store.state.settings.imgUrl;
+  created() {},
+  methods: {
+    edit(row) {
+      this.$emit("toEdit", row);
     },
   },
-  created() {},
-  methods: {},
 };
 </script>
 

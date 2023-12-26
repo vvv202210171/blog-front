@@ -80,10 +80,15 @@
       </div>
     </el-form>
     <div class="table-container" v-if="showTableStyle">
-      <ShowTable :tableData="list" :loading="loading"></ShowTable>
+      <ShowTable
+        :tableData="list"
+        :loading="loading"
+        @toEdit="toEdit"
+        @toDel="del"
+      ></ShowTable>
     </div>
     <div class="list-container" v-else>
-      <ShowList :tableData="list"></ShowList>
+      <ShowList :tableData="list" @toEdit="toEdit" @toDel="del"></ShowList>
     </div>
     <div class="page">
       <Pagination
@@ -99,7 +104,7 @@
 <script>
 import ShowTable from "./ShowTable.vue";
 import ShowList from "./ShowList.vue";
-import { getArticleList } from "@/03-api/article";
+import { getArticleList, deleteArticle } from "@/03-api/article";
 import Pagination from "@/01-components/Pagination";
 import dayjs from "dayjs";
 const format = "YYYY-MM-DD HH:mm:ss";
@@ -131,6 +136,23 @@ export default {
     this.loadList();
   },
   methods: {
+    toEdit(row) {
+      this.$router.push({
+        path: "/article/Update",
+        query: { isAdd: true, articleId: row.articleId },
+      });
+    },
+    del(row) {
+      this.$confirm(`您确定要删除${row.articleTitle}吗`, "提示").then(
+        async () => {
+          const { code } = await deleteArticle({ id: row.articleId });
+          if (code == 0) {
+            this.$message.success("删除成功");
+            this.loadList();
+          }
+        }
+      );
+    },
     buildTree(data) {
       const tree = [];
       const map = {};

@@ -98,6 +98,7 @@ import {
   updateArticleType,
   deleteArticleType,
 } from "@/03-api/article";
+import { buildTree } from "@/02-utils/customer";
 const _form = {
   categoryName: "",
   categoryPid: 0,
@@ -174,32 +175,10 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    buildTree(list) {
-      const parents = {};
-      list
-        .filter((v) => v.categoryPid === 0)
-        .forEach((v) => {
-          parents[v.categoryId] = v;
-        });
-      list
-        .filter((v) => v.categoryPid !== 0)
-        .forEach((element) => {
-          const parent = parents[element.categoryPid];
-          if (parent) {
-            if (parent.children) {
-              parent.children.push(element);
-            } else {
-              parent.children = [element];
-            }
-          } else {
-            parents[element.categoryId] = element;
-          }
-        });
-      return Object.values(parents);
-    },
+
     async loadCateList() {
       const list = await getArticleTypeListCount();
-      this.tableData = this.buildTree(list);
+      this.tableData = buildTree(list);
     },
   },
   created() {

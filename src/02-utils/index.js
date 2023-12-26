@@ -367,3 +367,4 @@ export function monthDateTime2() {
   const EndDate = parseTime(new Date(nowYear, nowMonth, getMonthDays(nowMonth), 23, 59, 59).getTime(), '{y}-{m}-{d}')
   return [StartDate + ' 00:00:00', EndDate + ' 23:59:59']
 }
+

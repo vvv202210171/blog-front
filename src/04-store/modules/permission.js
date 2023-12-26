@@ -29,9 +29,9 @@ function convertToRoutes(menuList) {
     const router = {
       path: menuItem.path,
       name: menuItem.name,
+      hidden: menuItem.hidden,
       meta: {
         title: menuItem.menuName,
-        hidden: menuItem.hidden,
         parentId: menuItem.parentId,
         icon: menuItem.icon,
         index: "" + index++

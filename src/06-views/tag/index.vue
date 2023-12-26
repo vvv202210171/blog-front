@@ -3,7 +3,7 @@
     <el-col :span="8">
       <el-card class="card" shadow="never">
         <div slot="header" class="clearfix">
-          <span class="header"> {{ isAdd ? "添加分类" : "修改分类" }}</span>
+          <span class="header"> {{ isAdd ? "添加标签" : "修改标签" }}</span>
         </div>
 
         <el-form

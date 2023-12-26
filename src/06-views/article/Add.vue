@@ -1,7 +1,6 @@
 <template>
   <el-form
     ref="form"
-    :class="{ 'create-modal': !isEditor }"
     :rules="rules"
     :model="form"
     label-position="left"
@@ -13,23 +12,29 @@
       <el-tabs type="border-card">
         <el-tab-pane label="基本信息">
           <div class="content">
-            <el-form-item class="" label="允许评论" prop="IsComment">
-              <el-switch v-model="form.IsComment"></el-switch>
+            <el-form-item class="" label="标题" prop="articleTitle">
+              <el-input v-model="form.articleTitle" />
             </el-form-item>
-
-            <el-form-item class="" label="选择类别" prop="selectCates">
-              <SelectTree :treeData="cates" v-model="form.selectCates" />
+            <el-form-item label="内容" prop="articleContent">
+              <RichEditor @change="contentChange" :data="form.articleContent" />
             </el-form-item>
-            <el-form-item class="" label="显示状态" prop="status">
-              <el-button-group>
-                <el-button
-                  :type="item.val == form.Status ? 'primary' : ''"
-                  @click="checkStatusChange(item)"
-                  v-for="item in checkStatus"
-                  :key="item.val"
-                  >{{ item.name }}</el-button
+            <el-form-item class="" label="分类" prop="selectCates">
+              <el-cascader
+                v-model="form.selectCates"
+                :options="cates"
+                :props="{ label: 'categoryName', value: 'categoryId' }"
+                @change="handleChange"
+              ></el-cascader>
+            </el-form-item>
+            <el-form-item class="" label="标签" prop="articleTagIds">
+              <el-checkbox-group v-model="form.articleTagIds">
+                <el-checkbox
+                  :label="item.tagId"
+                  v-for="item in tags"
+                  :key="item.tagId"
+                  >{{ item.tagName }}</el-checkbox
                 >
-              </el-button-group>
+              </el-checkbox-group>
             </el-form-item>
             <el-form-item class="" label="封面图片" prop="ImgUrl">
               <el-upload
@@ -41,54 +46,27 @@
               >
                 <div class="image-box">
                   <!-- <img v-if="form.ImgUrl" :src="form.ImgUrl" class="avatar" /> -->
-                  <img v-if="form.ImgUrl" :src="form.ImgUrl" class="avatar" />
+                  <img
+                    v-if="form.articleThumbnail"
+                    :src="form.articleThumbnail"
+                    class="avatar"
+                  />
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </div>
               </el-upload>
             </el-form-item>
-            <el-form-item class="" label="文章标题" prop="Title">
-              <el-input v-model="form.Title" :disabled="isEditor" />
-            </el-form-item>
-            <el-form-item class="" label="排序数字" prop="SortId">
-              <el-input v-model="form.SortId" />
-            </el-form-item>
-            <el-form-item class="" label="浏览次数" prop="Click">
-              <el-input v-model="form.Click" />
-            </el-form-item>
-            <el-form-item class="" label="文章来源" prop="Source">
-              <el-input v-model="form.Source" />
-            </el-form-item>
-            <el-form-item class="" label="文章作者" prop="Author">
-              <el-input v-model="form.Author" />
+            <el-form-item class="" label="状态" prop="articleStatus">
+              <el-radio-group v-model="form.articleStatus">
+                <el-radio
+                  :label="item.val"
+                  v-for="item in articleStatus"
+                  :key="item.val"
+                  >{{ item.name }}</el-radio
+                >
+              </el-radio-group>
             </el-form-item>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="详细描述">
-          <el-form-item class="" label="调用别名" prop="CallIndex">
-            <el-input v-model="form.CallIndex" />
-          </el-form-item>
-          <el-form-item class="" label="外部链接" prop="LinkUrl">
-            <el-input v-model="form.LinkUrl" />
-          </el-form-item>
-          <el-form-item class="" label="内容摘要" prop="Zhaiyao">
-            <el-input v-model="form.Zhaiyao" />
-          </el-form-item>
-          <el-form-item class="" label="内容介绍" prop="ContentHTML">
-            <RichEditor
-              @change="contentChange"
-              :data="form.ContentHTML"
-            /> </el-form-item
-        ></el-tab-pane>
-        <el-tab-pane label="seo选项">
-          <el-form-item class="" label="SEO标题" prop="SeoTitle">
-            <el-input v-model="form.SeoTitle" />
-          </el-form-item>
-          <el-form-item class="" label="SEO关健字" prop="SeoKeyword">
-            <el-input v-model="form.SeoKeyword" />
-          </el-form-item>
-          <el-form-item class="" label="SEO描述" prop="SeoDescription">
-            <el-input v-model="form.SeoDescription" /> </el-form-item
-        ></el-tab-pane>
       </el-tabs>
 
       <el-form-item class="footer-btn">
@@ -100,147 +78,91 @@
 </template>
 
 <script>
-import { getArticleTypeList, add, update } from "@/03-api/article";
+import {
+  getArticleTypeList,
+  add,
+  uploadFile,
+  getArticleTagList,
+} from "@/03-api/article";
 import RichEditor from "@/01-components/RichEditor";
-import SelectTree from "@/01-components/SelectTree";
-import { mapGetters } from "vuex";
 import { ArticleStatusEnum } from "@/02-utils/enum";
+import { buildTree } from "@/02-utils/customer";
 const _form = {
   Id: 0,
-  SiteId: 0,
-  ChannelId: 0,
-  CategoryId: 0,
-  CallIndex: "",
-  Title: "",
-  Source: "",
-  Author: "",
-  LinkUrl: "",
-  ImgUrl: "",
-  SeoTitle: "",
-  SeoKeyword: "",
-  SeoDescription: "",
-  Zhaiyao: "",
-  ContentHTML: "",
-  SortId: 0,
-  Click: 100,
-  GroupIds: 0,
-  Status: ArticleStatusEnum[0].val,
-  IsComment: true,
-  CommentCount: 0,
-  LikeCount: 0,
+  articleTitle: "",
+  articleContent: "",
+  articleParentCategoryId: "",
+  articleChildCategoryId: "",
+  articleThumbnail: "",
+  articleStatus: ArticleStatusEnum[0].val,
+  articleTagIds: [],
   selectCates: [],
-  update_image: true,
 };
 export default {
   name: "Article",
-  components: { RichEditor, SelectTree },
-  props: {
-    show: {
-      type: Boolean,
-      default: false,
-    },
-    model: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
-  },
+  components: { RichEditor },
   data() {
-    const validateUserName = (rule, value, callback) => {
-      if (this.isEditor) {
-        callback();
-      } else if (!value) {
-        callback(new Error(this.$t("report_0016")));
-      } else {
-        callback();
-      }
-    };
-
     return {
       loading: false,
-      isEditor: false,
-      dialogFormVisible: false,
-      cates: [],
-      checkStatus: ArticleStatusEnum,
-      file: null,
       form: {
         ..._form,
       },
+      articleStatus: ArticleStatusEnum,
+      cates: [],
+      tags: [],
       rules: {
-        Title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
+        articleTitle: [
+          { required: true, message: "标题不能为空", trigger: "blur" },
+        ],
         selectCates: [
           { required: true, message: "选择类别不能为空", trigger: "blur" },
         ],
-        ContentHTML: [
+        articleContent: [
           { required: true, message: "内容不能为空", trigger: "blur" },
         ],
-        AdminUser: [{ validator: validateUserName, trigger: "blur" }],
       },
     };
   },
   computed: {
-    ...mapGetters(["currency"]),
-  },
-  watch: {
-    "form.selectCates": {
-      handler(newVal) {
-        if (newVal) {
-          const len = newVal.length;
-          this.form.CategoryId = newVal[len - 1];
-        }
-      },
-      deep: true, // 启用深度监听
+    imgUrl() {
+      return this.$store.state.settings.imgUrl;
     },
   },
   created() {
-    this.loadArticleList();
-    this.init();
+    this.loadArticleTypeList();
+    this.loadArticleTagList();
   },
   methods: {
-    async loadArticleList() {
+    async loadArticleTagList() {
+      const data = await getArticleTagList();
+      this.tags = data;
+    },
+    async loadArticleTypeList() {
       const data = await getArticleTypeList();
-      this.cates = this.buildTree(data);
+      this.cates = buildTree(data);
     },
-    init() {
-      this.form.Status = this.checkStatus[0].val;
-    },
-    buildTree(data) {
-      const tree = [];
-      const map = {};
-      data.forEach((item) => {
-        map[item.Id] = { ...item };
-      });
-      data.forEach((item) => {
-        if (item.ParentId === 0) {
-          tree.push(map[item.Id]);
-        } else {
-          if (!Object.hasOwnProperty(map[item.ParentId], "children")) {
-            map[item.ParentId].children = [];
-          }
-          map[item.ParentId].children.push(map[item.Id]);
-        }
-      });
-      return tree;
-    },
-    customRequest(data) {
+    async customRequest(data) {
       const file = data.file;
-      this.file = file;
-      // 读取文件并转换为 Data URL
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.form.ImgUrl = e.target.result;
-      };
-      reader.readAsDataURL(file);
-
+      const formData = { file, dir: "thumbnail/random" };
+      const ret = await uploadFile(formData);
+      this.form.articleThumbnail = ret;
       // 如果要将 Data URL 赋值给 ImgUrl 属性，取消注释下一行。
       // this.form.ImgUrl = this.fileDataUrl;
     },
+    handleChange() {
+      const len = this.form.selectCates.length;
+      if (len >= 1) {
+        this.form.articleParentCategoryId = this.form.selectCates[0];
+      }
+      if (len == 2) {
+        this.form.articleChildCategoryId = this.form.selectCates[1];
+      }
+    },
     checkStatusChange(checkItem) {
-      this.form.Status = checkItem.val;
+      this.form.articleStatus = checkItem.val;
     },
     contentChange(data) {
-      this.form.ContentHTML = data;
+      this.form.articleContent = data;
     },
     backLastPage() {
       this.$store
@@ -252,7 +174,7 @@ export default {
             this.$router.replace(latestView.path);
           } else {
             // 如果没有其他标签页，可以跳转到指定的路由或返回上一页
-            this.$router.push({ path: "/content/articleManagement" });
+            this.$router.push({ path: "/article/index" });
           }
         });
     },
@@ -261,7 +183,6 @@ export default {
         this.loading = true;
         if (await this.$refs.form.validate()) {
           const param = { ...this.form };
-          param.ImgUrl = this.file;
           await add(param, { isAction: true });
           this.$message.success("新增成功");
           this.backLastPage();
@@ -278,6 +199,9 @@ export default {
 <style lang="scss">
 .content {
   padding: 10px;
+  .html {
+    height: 200px;
+  }
   .image-box {
     display: flex;
     justify-content: center;
@@ -294,23 +218,6 @@ export default {
   }
   .check {
     padding: 9px 10px;
-  }
-}
-.cates {
-  display: flex;
-  .cates-drop {
-    padding: 5px 12px 5px 5px;
-    min-width: 200px;
-    max-height: 300px;
-    border-radius: 4px;
-    overflow: hidden;
-    overflow-y: auto;
-  }
-  .cates-select {
-    margin-left: 10px;
-    .cates-select-btn {
-      margin-right: 5px;
-    }
   }
 }
 

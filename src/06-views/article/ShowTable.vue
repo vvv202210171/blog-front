@@ -9,10 +9,7 @@
         show-overflow-tooltip
       >
         <template #default="scope">
-          <el-image
-            class="img"
-            :src="imgUrl + scope.row.articleThumbnail"
-          ></el-image>
+          <el-image class="img" :src="scope.row.articleThumbnail"></el-image>
           <!-- <div class="title">
             <el-image class="img" :src="scope.row.ImgUrl"></el-image>
             <div class="text">
@@ -120,21 +117,15 @@ export default {
       ArticleStatusEnum: ArticleStatusEnum,
     };
   },
-  computed: {
-    imgUrl() {
-      return this.$store.state.settings.imgUrl;
-    },
-  },
   created() {},
   methods: {
     copy(row) {},
     edit(row) {
-      this.$router.push({
-        path: "/content/update",
-        query: { isAdd: true, Id: row.Id },
-      });
+      this.$emit("toEdit", row);
     },
-    del(row) {},
+    del(row) {
+      this.$emit("toDel", row);
+    },
     handleSelectionChange(val) {},
   },
   filters: {

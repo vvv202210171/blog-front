@@ -70,9 +70,15 @@ export function getArticleTagListCount() {
   });
 
 }
+export function getArticleTagList() {
+  return request({
+    url: "/admin/tag/list",
+    method: "get",
+  });
+}
 export function uploadFile(formData) {
   return request({
-    url: "/mc_api/content/images_upload",
+    url: "/admin/upload/img",
     method: "post",
     data: formData,
     isFormRequest: true,
@@ -88,27 +94,33 @@ export function getArticleList(params) {
 }
 export function add(data) {
   return request({
-    url: "/mc_api/article/article_merge",
+    url: "/admin/article/add",
     method: "post",
-    data,
-    isFormRequest: true,
+    data
   });
 }
 
 export function update(data) {
   return request({
-    url: "/mc_api/article/article_merge",
+    url: "/admin/article/update",
     method: "post",
     data,
-    isFormRequest: true,
+  });
+}
+export function deleteArticle(params, isAction = true) {
+  return request({
+    url: "/admin/article/delete",
+    method: "get",
+    params,
+    isAction
   });
 }
 //查询单条文章
-export function getArticleById(data) {
+export function getArticleById(params) {
   return request({
-    url: "/rp_api/article/article_get",
-    method: "post",
-    data,
+    url: "/admin/article/get",
+    method: "get",
+    params,
   });
 }
 
