@@ -26,6 +26,19 @@ export const UserStatusEnum = [
 
 ];
 
+export const PageStatusEnum = [
+  {
+    name: "显示",
+    code: "Enable",
+    val: 1,
+  },
+  {
+    name: "隐藏",
+    code: "Disable",
+    val: 0,
+  },
+
+];
 export const MENU_LIST = [
   {
     id: 1,
@@ -101,5 +114,13 @@ export const MENU_LIST = [
     menuName: "添加页面",
     hidden: false,
     path: "/page/Add",
+  },
+  {
+    id: 10,
+    parentId: 4,
+    name: "page_add",
+    menuName: "修改页面",
+    hidden: true,
+    path: "/page/Update",
   },
 ]
