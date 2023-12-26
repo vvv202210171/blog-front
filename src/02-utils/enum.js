@@ -39,6 +39,19 @@ export const PageStatusEnum = [
   },
 
 ];
+export const LinkStatusEnum = [
+  {
+    name: "显示",
+    code: "Enable",
+    val: 1,
+  },
+  {
+    name: "隐藏",
+    code: "Disable",
+    val: 0,
+  },
+
+];
 export const MENU_LIST = [
   {
     id: 1,
@@ -122,5 +135,37 @@ export const MENU_LIST = [
     menuName: "修改页面",
     hidden: true,
     path: "/page/Update",
+  },
+  {
+    id: 11,
+    parentId: 0,
+    name: "linK",
+    menuName: "链接",
+    hidden: false,
+    path: "",
+  },
+  {
+    id: 12,
+    parentId: 11,
+    name: "link_list",
+    menuName: "全部链接",
+    hidden: false,
+    path: "/link/index",
+  },
+  {
+    id: 13,
+    parentId: 11,
+    name: "link_add",
+    menuName: "添加链接",
+    hidden: false,
+    path: "/link/Add",
+  },
+  {
+    id: 14,
+    parentId: 11,
+    name: "link_Update",
+    menuName: "修改链接",
+    hidden: true,
+    path: "/link/Update",
   },
 ]
