@@ -65,7 +65,19 @@ export const NoticeStatusEnum = [
   },
 
 ];
+export const CommentStatusEnum = [
+  {
+    name: "允许",
+    code: "Enable",
+    val: 1,
+  },
+  {
+    name: "不允许",
+    code: "Disable",
+    val: 0,
+  },
 
+];
 export const MENU_LIST = [
   {
     id: 1,
@@ -203,7 +215,7 @@ export const MENU_LIST = [
   {
     id: 17,
     parentId: 15,
-    name: "notice_list",
+    name: "notice_add",
     menuName: "添加公告",
     hidden: false,
     path: "/notice/Add",
@@ -211,9 +223,26 @@ export const MENU_LIST = [
   {
     id: 18,
     parentId: 15,
-    name: "notice_list",
+    name: "notice_update",
     menuName: "修改公告",
     hidden: true,
     path: "/notice/Update",
+  },
+  {
+    id: 19,
+    parentId: 0,
+    name: "commnet_list",
+    menuName: "评论",
+    hidden: false,
+    icon: "el-icon-s-comment",
+    path: "",
+  },
+  {
+    id: 20,
+    parentId: 19,
+    name: "commnet_list",
+    menuName: "评论列表",
+    hidden: false,
+    path: "/comment/index",
   },
 ]
