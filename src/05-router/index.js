@@ -71,20 +71,7 @@ export const constantRoutes = [
       },
     ],
   },
-  {
-    path: "/user",
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: "/user/userGroupRole",
-        component: () => import("@/06-views/user/userGroupRole"),
-        meta: {
-          title: i18n.t("common_0034"),
-        },
-      },
-    ],
-  },
+
 ];
 
 

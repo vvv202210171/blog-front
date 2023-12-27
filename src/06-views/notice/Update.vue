@@ -43,11 +43,6 @@
           </el-form-item>
         </el-form>
       </el-card>
-      <el-card shadow="never" class="card">
-        <h5>温馨提示：</h5>
-        <p>URL：如 http://liuyanzhao.com</p>
-        <p>Order：默认是0，Order越大排名越靠前</p>
-      </el-card>
     </el-col>
   </el-row>
 </template>

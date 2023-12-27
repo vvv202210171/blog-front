@@ -20,14 +20,7 @@ const mutations = {
 }
 
 const actions = {
-  async loadUserGroupList({ commit }, MerchantAlias) {
-    try {
-      const data = await getUserGroupSimpleList({ MerchantAlias })
-      commit('SET_USER_GROUP', data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+
 }
 
 export default {
