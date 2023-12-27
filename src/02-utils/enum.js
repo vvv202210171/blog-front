@@ -78,6 +78,19 @@ export const CommentStatusEnum = [
   },
 
 ];
+export const MenuLevelEnum = [
+  {
+    name: "顶部菜单",
+    code: "Enable",
+    val: 1,
+  },
+  {
+    name: "主体菜单",
+    code: "Disable",
+    val: 2,
+  },
+
+];
 export const MENU_LIST = [
   {
     id: 1,
@@ -277,5 +290,22 @@ export const MENU_LIST = [
     menuName: "修改用户",
     hidden: true,
     path: "/user/Update",
+  },
+  {
+    id: 24,
+    parentId: 0,
+    name: "setting",
+    menuName: "设置",
+    icon: "el-icon-s-tools",
+    hidden: false,
+    path: "",
+  },
+  {
+    id: 25,
+    parentId: 24,
+    name: "setting_menu",
+    menuName: "菜单",
+    hidden: false,
+    path: "/setting/menu",
   },
 ]
