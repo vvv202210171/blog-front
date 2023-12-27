@@ -30,3 +30,17 @@ export function deleteMenu(params, isAction = true) {
         isAction
     });
 }
+export function getOptionsList() {
+    return request({
+        url: "/admin/options/list",
+        method: "get",
+    });
+}
+export function updateOptions(data, isAction = true) {
+    return request({
+        url: "/admin/options/update",
+        method: "post",
+        data,
+        isAction
+    });
+}

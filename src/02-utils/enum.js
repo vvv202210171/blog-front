@@ -308,4 +308,12 @@ export const MENU_LIST = [
     hidden: false,
     path: "/setting/menu",
   },
+  {
+    id: 26,
+    parentId: 24,
+    name: "setting_basic",
+    menuName: "主要选项",
+    hidden: false,
+    path: "/setting/basic",
+  },
 ]
