@@ -52,6 +52,20 @@ export const LinkStatusEnum = [
   },
 
 ];
+export const NoticeStatusEnum = [
+  {
+    name: "显示",
+    code: "Enable",
+    val: 1,
+  },
+  {
+    name: "隐藏",
+    code: "Disable",
+    val: 0,
+  },
+
+];
+
 export const MENU_LIST = [
   {
     id: 1,
@@ -141,6 +155,7 @@ export const MENU_LIST = [
     parentId: 0,
     name: "linK",
     menuName: "链接",
+    icon: "el-icon-link",
     hidden: false,
     path: "",
   },
@@ -167,5 +182,38 @@ export const MENU_LIST = [
     menuName: "修改链接",
     hidden: true,
     path: "/link/Update",
+  },
+  {
+    id: 15,
+    parentId: 0,
+    name: "notice",
+    menuName: "公告",
+    hidden: false,
+    path: "",
+    icon: "el-icon-chat-round",
+  },
+  {
+    id: 16,
+    parentId: 15,
+    name: "notice_list",
+    menuName: "全部公告",
+    hidden: false,
+    path: "/notice/index",
+  },
+  {
+    id: 17,
+    parentId: 15,
+    name: "notice_list",
+    menuName: "添加公告",
+    hidden: false,
+    path: "/notice/Add",
+  },
+  {
+    id: 18,
+    parentId: 15,
+    name: "notice_list",
+    menuName: "修改公告",
+    hidden: true,
+    path: "/notice/Update",
   },
 ]

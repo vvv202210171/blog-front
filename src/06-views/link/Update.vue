@@ -29,6 +29,16 @@
           <el-form-item label="Order" prop="linkOrder">
             <el-input v-model="ruleForm.linkOrder"></el-input>
           </el-form-item>
+          <el-form-item class="" label="状态" prop="linkStatus">
+            <el-radio-group v-model="ruleForm.linkStatus">
+              <el-radio
+                :label="item.val"
+                v-for="item in linkStatus"
+                :key="item.val"
+                >{{ item.name }}</el-radio
+              >
+            </el-radio-group>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">{{
               isAdd ? "添加" : "修改"
@@ -59,6 +69,7 @@
           show-overflow-tooltip
         />
         <el-table-column prop="linkOrder" label="Order" sortable />
+
         <el-table-column label="操作">
           <template #default="scope">
             <el-button
@@ -83,6 +94,7 @@
 </template>
 <script>
 import { getLinkList, delLink, getLink, updateLink } from "@/03-api/link";
+import { LinkStatusEnum } from "@/02-utils/enum";
 const _form = {
   linkName: "",
   linkUrl: "",
@@ -90,12 +102,14 @@ const _form = {
   linkDescription: "",
   linkOrder: "",
   linkId: null,
+  linkStatus: "",
 };
 export default {
   data() {
     return {
       ruleForm: JSON.parse(JSON.stringify(_form)),
       isAdd: false,
+      linkStatus: LinkStatusEnum,
       rules: {
         linkName: [
           { required: true, message: "名称不能为空", trigger: "blur" },
@@ -130,7 +144,7 @@ export default {
         const { code } = await delLink({ id: row.linkId });
         if (code == 0) {
           this.$message.success("删除成功");
-          this.loadLink();
+          this.getLinkList();
         }
       });
     },
